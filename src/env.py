@@ -10,5 +10,9 @@ POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD")
 POSTGRES_DB: str = os.getenv("POSTGRES_DB")
 DB_HOST: str = os.getenv("DB_HOST")
 DB_PORT: str = os.getenv("DB_PORT")
+
+REDIS_HOST: str = os.getenv("REDIS_HOST")
+REDIS_PORT: str = os.getenv("REDIS_PORT")
+
 AVATAR_URL: str = os.getenv("AVATAR_URL")
 

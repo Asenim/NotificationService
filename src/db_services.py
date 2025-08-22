@@ -9,3 +9,7 @@ class UserRepository:
             username=username,
             avatar_url=AVATAR_URL,
         )
+
+    @staticmethod
+    async def get_user(username):
+        return await User.get(username=username)
