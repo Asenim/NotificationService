@@ -6,11 +6,14 @@ from src.db_services import UserRepository
 user_router = APIRouter()
 
 
-# todo: Вынести в __init__.py пакета api
-async def get_redis(request: Request):
-    return request.app.state.redis
-
-
 @user_router.post("/register", response_model=User)
 async def register(user: UserCreate, repo: UserRepository = Depends()):
-    return await repo.create_user(username=user.username)
+    created_user = await repo.create_user(username=user.username)
+    # todo: Тут будет вызов создание JWT токена
+
+    return User(
+        id=created_user.id,
+        access_token="none",
+        refresh_token="none"
+    )
+

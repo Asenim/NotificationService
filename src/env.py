@@ -16,3 +16,7 @@ REDIS_PORT: str = os.getenv("REDIS_PORT")
 
 AVATAR_URL: str = os.getenv("AVATAR_URL")
 
+JWT_SECRET: str = os.getenv("JWT_SECRET")
+JWT_ALG: str = os.getenv("JWT_ALG")
+ACCESS_JWT_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_JWT_EXPIRE_MINUTES"))
+REFRESH_JWT_EXPIRE_MINUTES: int = int(os.getenv("REFRESH_JWT_EXPIRE_MINUTES"))
