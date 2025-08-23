@@ -1,4 +1,4 @@
-# auth.py
+from fastapi import Request
 from datetime import datetime, timedelta
 from jose import jwt
 from uuid import uuid4
@@ -8,9 +8,11 @@ from src.env import (
     ACCESS_JWT_EXPIRE_MINUTES,
     REFRESH_JWT_EXPIRE_MINUTES,
 )
+from src.models import User
+from src.security_models import SessionTokens, Token
 
 
-def __create_token(data: dict, expires_delta: timedelta):
+def __create_token(data: dict, expires_delta: timedelta) -> Token:
     to_encode = data.copy()
 
     # todo: Возможно будет лучше использовать int(datetime.now(timezone.utc))
@@ -21,19 +23,38 @@ def __create_token(data: dict, expires_delta: timedelta):
 
     token = jwt.encode(to_encode, JWT_SECRET, algorithm=JWT_ALG)
 
-    # todo: Возможно лучше будет сюда тоже прикрутить pydantic или хотя бы dataclass
-    return {"token": token, "jti": jti, "exp": exp, "iat": iat}
+    return Token(
+        token=token,
+        jti=jti,
+        iat=iat,
+        exp=exp
+    )
 
 
-def create_access_token(user_id: int):
+def create_access_token(user_id: int) -> Token:
     return __create_token(
         {"sub": str(user_id), "type": "access"},
         timedelta(minutes=ACCESS_JWT_EXPIRE_MINUTES),
     )
 
 
-def create_refresh_token(user_id: int):
+def create_refresh_token(user_id: int) -> Token:
     return __create_token(
         {"sub": str(user_id), "type": "refresh"},
         timedelta(minutes=REFRESH_JWT_EXPIRE_MINUTES),
+    )
+
+
+def create_session_tokens(request: Request, user: User) -> SessionTokens:
+    access = create_access_token(user.id)
+    refresh = create_refresh_token(user.id)
+    redis = request.app.state.redis
+    expires_in = REFRESH_JWT_EXPIRE_MINUTES * 60
+    await redis.set(
+        f"refresh:{user.id}:{refresh.jti}",
+        refresh.token, ex=expires_in)
+
+    return SessionTokens(
+        access=access,
+        refresh=refresh
     )

@@ -2,7 +2,7 @@ import uvicorn
 
 from fastapi import FastAPI
 from src.db import init_db, init_redis
-from api.user_api import user_router
+from api.user import user_router
 
 
 app = FastAPI()
