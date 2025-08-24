@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request, Response, HTTPException
 
-from src.rest_models import UserCreate, User, UserLogin
-from src.security_models import SessionTokens
+from src.shemas.rest_models import UserCreate, User, UserLogin
+from src.shemas.security_models import SessionTokens
 from src.db_services import UserRepository
 from src.security import (
     create_session_tokens,

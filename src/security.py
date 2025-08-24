@@ -9,7 +9,7 @@ from src.env import (
     REFRESH_JWT_EXPIRE_MINUTES,
 )
 from src.models import User
-from src.security_models import SessionTokens, Token
+from src.shemas.security_models import SessionTokens, Token
 
 
 def __create_token(data: dict, expires_delta: timedelta) -> Token:
