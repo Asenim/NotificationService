@@ -1,6 +1,6 @@
-from fastapi import Request
+from fastapi import Request, Response, HTTPException
 from datetime import datetime, timedelta
-from jose import jwt
+from jose import jwt, JWTError
 from uuid import uuid4
 
 from src.env import (
@@ -45,7 +45,7 @@ def create_refresh_token(user_id: int) -> Token:
     )
 
 
-def create_session_tokens(request: Request, user: User) -> SessionTokens:
+async def create_session_tokens(request: Request, response: Response, user: User) -> SessionTokens:
     access = create_access_token(user.id)
     refresh = create_refresh_token(user.id)
     redis = request.app.state.redis
@@ -54,7 +54,30 @@ def create_session_tokens(request: Request, user: User) -> SessionTokens:
         f"refresh:{user.id}:{refresh.jti}",
         refresh.token, ex=expires_in)
 
-    return SessionTokens(
-        access=access,
-        refresh=refresh
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh.token,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        max_age=expires_in,
     )
+
+    return SessionTokens(
+        access=access.token,
+        refresh=refresh.token
+    )
+
+
+def generate_new_access_token_from_refresh(refresh_token: str) -> str:
+    try:
+        payload = jwt.decode(refresh_token, JWT_SECRET, algorithms=[JWT_ALG])
+        if payload.get("type") != "refresh":
+            raise HTTPException(status_code=401, detail="Invalid token type")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
+
+    user_id = int(payload["sub"])
+    new_access = create_access_token(user_id=user_id)
+
+    return new_access.token

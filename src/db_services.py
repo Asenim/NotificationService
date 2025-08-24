@@ -12,5 +12,5 @@ class UserRepository:
         )
 
     @staticmethod
-    async def get_user(username: str) -> str:
+    async def get_user(username: str) -> User:
         return await User.get(username=username)

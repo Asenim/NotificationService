@@ -9,3 +9,7 @@ class User(BaseModel):
     id: int
     access_token: str
     refresh_token: str
+
+
+class UserLogin(BaseModel):
+    username: str
