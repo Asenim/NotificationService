@@ -8,12 +8,11 @@ from src.env import AVATAR_URL
 class UserRepository:
     @staticmethod
     async def create_user(username: str) -> User:
-        # todo: Сделать обработку исключения когда создается пользователь с существующим username
         try:
             user = await User.create(
                 username=username,
                 avatar_url=AVATAR_URL,
-        )
+            )
             return user
         except IntegrityError:
             raise HTTPException(
