@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from src.enums import NotificationType
+
 
 class UserCreate(BaseModel):
     username: str
@@ -13,3 +15,8 @@ class User(BaseModel):
 
 class UserLogin(BaseModel):
     username: str
+
+
+class NotificationCreate(BaseModel):
+    type: NotificationType
+    text: str

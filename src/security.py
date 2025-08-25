@@ -3,6 +3,8 @@ from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from uuid import uuid4
 
+from starlette import status
+
 from src.env import (
     JWT_SECRET, JWT_ALG,
     ACCESS_JWT_EXPIRE_MINUTES,
@@ -81,3 +83,20 @@ def generate_new_access_token_from_refresh(refresh_token: str) -> str:
     new_access = create_access_token(user_id=user_id)
 
     return new_access.token
+
+
+def decode_access_token(token: str) -> dict:
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALG])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token",
+            )
+        return payload
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+        )

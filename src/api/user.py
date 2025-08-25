@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request, Response, HTTPException
+from starlette import status
 
 from src.shemas.rest_models import UserCreate, User, UserLogin
 from src.shemas.security_models import SessionTokens
@@ -57,7 +58,10 @@ async def update_refresh_token(
 ):
     refresh = request.cookies.get("refresh_token")
     if not refresh:
-        raise HTTPException(status_code=401, detail="Missing refresh token")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing refresh token"
+        )
 
     access = generate_new_access_token_from_refresh(refresh_token=refresh)
 

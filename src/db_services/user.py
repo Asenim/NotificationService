@@ -1,3 +1,4 @@
+from starlette import status
 from tortoise.exceptions import DoesNotExist, IntegrityError
 from fastapi import HTTPException
 
@@ -16,7 +17,7 @@ class UserRepository:
             return user
         except IntegrityError:
             raise HTTPException(
-                status_code=409,
+                status_code=status.HTTP_409_CONFLICT,
                 detail="User with this username already exists"
             )
 
@@ -27,6 +28,6 @@ class UserRepository:
             return user
         except DoesNotExist:
             raise HTTPException(
-                status_code=404,
+                status_code=status.HTTP_404_NOT_FOUND,
                 detail="User not found"
             )
