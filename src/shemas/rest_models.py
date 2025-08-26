@@ -1,5 +1,6 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 
+from src.shemas import ConfigModel
 from src.enums import NotificationType
 
 
@@ -7,7 +8,7 @@ class UserCreate(BaseModel):
     username: str
 
 
-class User(BaseModel):
+class UserResponse(BaseModel):
     id: int
     access_token: str
     refresh_token: str
@@ -17,28 +18,23 @@ class UserLogin(BaseModel):
     username: str
 
 
-class Notification(BaseModel):
+class NotificationCreatedResponse(ConfigModel):
     user_id: int
     type: NotificationType
     text: str
 
-    model_config = ConfigDict(
-        from_attributes=True,
-        use_enum_values=True,
-    )
 
-
-class NotificationCreate(BaseModel):
+class NotificationCreate(ConfigModel):
     notification_type: NotificationType
     text: str
-
-    model_config = ConfigDict(
-        from_attributes=True,
-        use_enum_values=True,
-    )
 
 
 class NotificationDeleted(BaseModel):
     user_id: int
     notification_id: int
     detail: str
+
+
+class NotificationsResponse(ConfigModel):
+    user: str
+    notifications: list[NotificationCreate]

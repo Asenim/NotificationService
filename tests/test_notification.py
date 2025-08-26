@@ -24,7 +24,7 @@ BASE_URL = "http://localhost:8080"
 # def test_create_notification():
 #     tokens = requests.post(
 #         url=BASE_URL + "/auth/login",
-#         json={"username": "alfob"}
+#         json={"username": "alfob2"}
 #     )
 #
 #     access_token = tokens.json()["access"]
@@ -52,14 +52,14 @@ BASE_URL = "http://localhost:8080"
 # def test_delete_notification():
 #     tokens = requests.post(
 #             url=BASE_URL + "/auth/login",
-#             json={"username": "alfob"}
+#             json={"username": "alfob2"}
 #         )
 #
 #     access_token = tokens.json()["access"]
 #     headers = {"Authorization": f"Bearer {access_token}"}
 #
 #     response = requests.delete(
-#         url=BASE_URL + "/notifications/3",
+#         url=BASE_URL + "/notifications/14",
 #         headers=headers,
 #     )
 #     print(response.text)

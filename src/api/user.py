@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request, Response, HTTPException
 from starlette import status
 
-from src.shemas.rest_models import UserCreate, User, UserLogin
+from src.shemas.rest_models import UserCreate, UserResponse, UserLogin
 from src.shemas.security_models import SessionTokens
 from src.db_services.user import UserRepository
 from src.security import (
@@ -13,7 +13,7 @@ from src.security import (
 user_router = APIRouter()
 
 
-@user_router.post("/register", response_model=User)
+@user_router.post("/register", response_model=UserResponse)
 async def register(
         request: Request,
         response: Response,
@@ -26,7 +26,7 @@ async def register(
         response=response,
         user=created_user
     )
-    return User(
+    return UserResponse(
         id=created_user.id,
         access_token=tokens.access,
         refresh_token=tokens.refresh

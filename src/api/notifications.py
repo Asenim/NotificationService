@@ -3,8 +3,9 @@ from fastapi.security import OAuth2PasswordBearer
 
 from src.shemas.rest_models import (
     NotificationCreate,
-    Notification,
+    NotificationCreatedResponse,
     NotificationDeleted,
+    NotificationsResponse,
 )
 from src.security import decode_access_token
 from src.db_services.notifications import NotificationRepository
@@ -14,12 +15,15 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 notification_router = APIRouter()
 
 
-@notification_router.get("/notifications")
+@notification_router.get("/notifications", response_model=NotificationsResponse)
 def get_notifications(token: str = Depends(oauth2_scheme)):
     return token
 
 
-@notification_router.post("/notifications", response_model=Notification)
+@notification_router.post(
+    "/notifications",
+    response_model=NotificationCreatedResponse
+)
 async def create_notifications(
         data: NotificationCreate,
         repo: NotificationRepository = Depends(),
@@ -33,7 +37,7 @@ async def create_notifications(
         **data.model_dump()
     )
 
-    return Notification(
+    return NotificationCreatedResponse(
         user_id=notification_data.user.id,
         type=notification_data.type,
         text=notification_data.text
@@ -58,5 +62,4 @@ async def delete_notifications(
         user_id=user_id,
         notification_id=notification_id,
         detail="Notification deleted"
-
     )
