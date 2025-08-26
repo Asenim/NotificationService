@@ -1,0 +1,6 @@
+venv
+.idea
+experiments
+.env*
+dangerous_but_necessary_code
+.pytest*
