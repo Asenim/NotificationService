@@ -15,6 +15,8 @@ REDIS_HOST: str = os.getenv("REDIS_HOST")
 REDIS_PORT: str = os.getenv("REDIS_PORT")
 
 AVATAR_URL: str = os.getenv("AVATAR_URL")
+if not AVATAR_URL:
+    AVATAR_URL = "hardcode"
 
 JWT_SECRET: str = os.getenv("JWT_SECRET")
 JWT_ALG: str = os.getenv("JWT_ALG")
