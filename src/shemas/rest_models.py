@@ -36,3 +36,9 @@ class NotificationCreate(BaseModel):
         from_attributes=True,
         use_enum_values=True,
     )
+
+
+class NotificationDeleted(BaseModel):
+    user_id: int
+    notification_id: int
+    detail: str
