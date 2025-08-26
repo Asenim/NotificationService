@@ -16,8 +16,23 @@ notification_router = APIRouter()
 
 
 @notification_router.get("/notifications", response_model=NotificationsResponse)
-def get_notifications(token: str = Depends(oauth2_scheme)):
-    return token
+async def get_notifications(
+        limit: int = 10,
+        offset: int = 10,
+        repo: NotificationRepository = Depends(),
+        token: str = Depends(oauth2_scheme)
+):
+    payload = decode_access_token(token=token)
+    user, notifications = await repo.get_notifications(
+        user_id=int(payload.get("sub")),
+        limit=limit,
+        offset=offset
+    )
+
+    return NotificationsResponse(
+        user=f"{user.username} {user.avatar_url}",
+        notifications=notifications
+    )
 
 
 @notification_router.post(
@@ -38,7 +53,7 @@ async def create_notifications(
     )
 
     return NotificationCreatedResponse(
-        user_id=notification_data.user.id,
+        user_id=user_id,    # notification_data.user.id,
         type=notification_data.type,
         text=notification_data.text
     )

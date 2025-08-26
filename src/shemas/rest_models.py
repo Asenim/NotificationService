@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from src.shemas import ConfigModel
 from src.enums import NotificationType
@@ -25,7 +25,7 @@ class NotificationCreatedResponse(ConfigModel):
 
 
 class NotificationCreate(ConfigModel):
-    notification_type: NotificationType
+    notification_type: NotificationType = Field(alias="type")
     text: str
 
 

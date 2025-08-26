@@ -20,25 +20,45 @@ BASE_URL = "http://localhost:8080"
 #     )
 #     print(response.json())
 #
+
+def test_create_notification():
+    tokens = requests.post(
+        url=BASE_URL + "/auth/login",
+        json={"username": "alfob"}
+    )
+
+    access_token = tokens.json()["access"]
+    headers = {"Authorization": f"Bearer {access_token}"}
+
+    response = requests.post(
+        url=BASE_URL + "/notifications",
+        headers=headers,
+        json={
+            "type": "like",
+            "text": "string"
+        },
+    )
+    print(response.json(), response.status_code, response.text)
+
 #
-# def test_create_notification():
+# def test_get_notifications():
 #     tokens = requests.post(
-#         url=BASE_URL + "/auth/login",
-#         json={"username": "alfob2"}
-#     )
+#             url=BASE_URL + "/auth/login",
+#             json={"username": "alfob"}
+#         )
 #
 #     access_token = tokens.json()["access"]
 #     headers = {"Authorization": f"Bearer {access_token}"}
 #
-#     response = requests.post(
+#     response = requests.get(
 #         url=BASE_URL + "/notifications",
 #         headers=headers,
-#         json={
-#             "notification_type": "like",
-#             "text": "string"
-#         },
+#         params={
+#             "limit": 10,
+#             "offset": 0,
+#         }
 #     )
-#     print(response.json(), response.status_code, response.text)
+#     print(response.text)
 
 
 # def test_user_register():

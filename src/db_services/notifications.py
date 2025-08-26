@@ -8,24 +8,43 @@ from src.db_services.user import UserRepository
 
 class NotificationRepository:
     @staticmethod
+    async def get_notifications(
+            user_id: int,
+            limit: int,
+            offset: int
+    ):
+        user = await UserRepository.get_user(user_id=user_id)
+        notifications = (
+            await Notification.filter(user_id=user.id)
+            .order_by("-created_at")
+            .offset(offset)
+            .limit(limit)
+        )
+
+        return user, notifications
+
+    @staticmethod
     async def create_notification(
             user_id: int,
             notification_type: NotificationType,
             text: str
     ) -> Notification:
 
-        user = await UserRepository.get_user(user_id=user_id)
+        # user = await UserRepository.get_user(user_id=user_id)
         notification = await Notification.create(
-            user=user,
+            user_id=user_id,    # user=user.id
             type=notification_type,
             text=text
         )
 
-        await notification.fetch_related("user")
+        # await notification.fetch_related("user")
         return notification
 
     @staticmethod
-    async def delete_notification(notification_id: int, user_id: int):
+    async def delete_notification(
+            notification_id: int,
+            user_id: int
+    ) -> None:
         try:
             notification = await Notification.get(id=notification_id)
             await notification.fetch_related("user")
