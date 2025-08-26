@@ -22,9 +22,21 @@ class UserRepository:
             )
 
     @staticmethod
-    async def get_user(username: str) -> User:
+    async def get_user(
+            username: str | None = None,
+            user_id: int | None = None
+    ) -> User:
         try:
-            user = await User.get(username=username)
+            if user_id is None and username is None:
+                raise ValueError(
+                    "Either id or username must be provided"
+                )
+
+            if username:
+                user = await User.get(username=username)
+            else:
+                user = await User.get(id=user_id)
+
             return user
         except DoesNotExist:
             raise HTTPException(

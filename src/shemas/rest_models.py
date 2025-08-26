@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from src.enums import NotificationType
 
@@ -17,6 +17,22 @@ class UserLogin(BaseModel):
     username: str
 
 
-class NotificationCreate(BaseModel):
+class Notification(BaseModel):
+    user_id: int
     type: NotificationType
     text: str
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        use_enum_values=True,
+    )
+
+
+class NotificationCreate(BaseModel):
+    notification_type: NotificationType
+    text: str
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        use_enum_values=True,
+    )

@@ -30,8 +30,12 @@ def test_create_notification():
     access_token = tokens.json()["access"]
     headers = {"Authorization": f"Bearer {access_token}"}
 
-    info = requests.post(
+    response = requests.post(
         url=BASE_URL + "/notifications",
         headers=headers,
+        json={
+            "notification_type": "like",
+            "text": "string"
+        },
     )
-    print(info.json())
+    print(response.json(), response.status_code, response.text)

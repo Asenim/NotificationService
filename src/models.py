@@ -14,7 +14,7 @@ class User(Model):
 
 class Notification(Model):
     id = fields.IntField(pk=True)
-    user_id: fields.ForeignKeyRelation["User"] = fields.ForeignKeyField(
+    user: fields.ForeignKeyRelation["User"] = fields.ForeignKeyField(
         "models.User", related_name="notifications", on_delete=fields.CASCADE
     )
     type = fields.CharEnumField(NotificationType, max_length=20)
