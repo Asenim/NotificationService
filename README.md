@@ -11,6 +11,7 @@
 - Tortoise ORM
 
 ### .env
+- Для docker-compose.yaml
 ```dotenv
 # Подключение к postgres
 POSTGRES_USER=value
@@ -21,6 +22,30 @@ DB_PORT=5432
 
 # Подключение к redis
 REDIS_HOST=redis
+REDIS_PORT=6379
+
+AVATAR_URL=hardcode
+
+# Алгоритм и соль для JWT
+JWT_SECRET=supersecret_change_me
+JWT_ALG=HS256
+
+# Время жизни Токенов в минутах
+ACCESS_JWT_EXPIRE_MINUTES=10
+REFRESH_JWT_EXPIRE_MINUTES=20
+```
+
+- Для docker-compose.dev.yaml
+```dotenv
+# Подключение к postgres
+POSTGRES_USER=value
+POSTGRES_PASSWORD=value
+POSTGRES_DB=db_name
+DB_HOST=127.0.0.1
+DB_PORT=5432
+
+# Подключение к redis
+REDIS_HOST=127.0.0.1
 REDIS_PORT=6379
 
 AVATAR_URL=hardcode
