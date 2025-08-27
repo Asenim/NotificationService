@@ -149,7 +149,7 @@ body: `{"username": "value"}`
 #### Создание уведомлений
 
 POST http://127.0.0.1:8080/notifications  
-Headers Authorization Bearer <Token>  
+Headers Authorization Bearer :Token:  
 body `{"type": "like", "text": "str"}`  
 P.S. "type" может быть только "comment", "like" или "repost"  
 
@@ -174,7 +174,7 @@ P.S. "type" может быть только "comment", "like" или "repost"
 ```
 #### Удаление своих уведомления
 DELETE http://127.0.0.1:8080/notifications/id  
-Headers Authorization Bearer <Token>  
+Headers Authorization Bearer :Token:  
 
 - Успех
 ```JSON
@@ -202,8 +202,8 @@ Headers Authorization Bearer <Token>
 ```
 
 #### Получение списка уведомлений
-GET http://127.0.0.1:8080/notifications
-Headers Authorization Bearer <Token>  
+GET http://127.0.0.1:8080/notifications  
+Headers Authorization Bearer :Token:  
 QueryParams limit, offset Пример строки ?limit=10&offset=10  
 
 - Успех
