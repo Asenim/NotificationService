@@ -1,4 +1,14 @@
 ### Описание
+Сервис уведомлений с JWT аутентификацией
+
+#### Используемые технологии
+- python
+- FastAPI
+- Docker
+- Docker-compose
+- Postgres
+- Redis
+- Tortoise ORM
 
 ### .env
 ```dotenv
@@ -37,7 +47,26 @@ cd имя папки проекта
 
 Поднимаете проект
 ```shell
-docker-compose up
+docker-compose -f docker-compose.yaml up
+```
+
+#### Второй способ
+```shell
+git pull
+```
+```shell
+git cd папка спуленного проекта
+```
+Не забываем про `.env`   
+В pycharm обязательно ПКМ по папке спуленного проекта -> Mark Directory as -> Sources root 
+Поднимаем контейнеры с окружением  
+Далее поднимаем БД и редис   
+```shell
+docker-compose -f docker-compose.dev.yaml up
+```
+Запускаем приложение либо из pycharm либо из консоли  
+```shell
+python src/main.py
 ```
 
 ### Запросы
@@ -95,6 +124,7 @@ body: `{"username": "value"}`
 #### Создание уведомлений
 
 POST http://127.0.0.1:8080/notifications  
+Headers Authorization Bearer <Token>  
 body `{"type": "like", "text": "str"}`  
 P.S. "type" может быть только "comment", "like" или "repost"  
 
@@ -112,6 +142,73 @@ P.S. "type" может быть только "comment", "like" или "repost"
     "detail": "Not authenticated"
 }
 ```
-
+```json
+{
+    "detail": "Invalid token"
+}
+```
 #### Удаление своих уведомления
+DELETE http://127.0.0.1:8080/notifications/id  
+Headers Authorization Bearer <Token>  
+
+- Успех
+```JSON
+{
+    "user_id": 1,
+    "notification_id": 1,
+    "detail": "Notification deleted"
+}
+```
+- Неудача
+```JSON
+{
+    "detail": "Notification not found"
+}
+```
+```JSON
+{
+    "detail": "Invalid token"
+}
+```
+```JSON
+{
+    "detail": "Not authenticated"
+}
+```
+
 #### Получение списка уведомлений
+GET http://127.0.0.1:8080/notifications
+Headers Authorization Bearer <Token>  
+QueryParams limit, offset Пример строки ?limit=10&offset=10  
+
+- Успех
+```JSON
+{
+    "user": "username avatar_url",
+    "notifications": [
+        {
+            "type": "like",
+            "text": "10"
+        },
+        {
+            "type": "like",
+            "text": "10"
+        },
+        {
+            "type": "like",
+            "text": "10"
+        }
+    ]
+}
+```
+- Неудача
+```JSON
+{
+    "detail": "Invalid token"
+}
+```
+```JSON
+{
+    "detail": "Not authenticated"
+}
+```
